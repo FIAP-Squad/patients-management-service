@@ -1,18 +1,17 @@
 import { IdentityCreatedHandler } from '@/infrastructure'
-import { type ICreateDoctor } from '@/usecases'
+import { type ICreatePatient } from '@/usecases'
 
 const mockEvent = (): any => (JSON.stringify({
   type: 'DOCTOR',
   email: 'test@example.com',
   password: 'securePassword',
   customAttributes: {
-    crm: '123456MG',
     cpf: '12345678901'
   }
 }))
 
-const mockCreateDoctor = (): ICreateDoctor => {
-  class CreateDoctorStub implements ICreateDoctor {
+const mockCreateDoctor = (): ICreatePatient => {
+  class CreateDoctorStub implements ICreatePatient {
     async execute (params: any): Promise<void> {
       return await Promise.resolve(null)
     }
@@ -22,7 +21,7 @@ const mockCreateDoctor = (): ICreateDoctor => {
 
 interface SutTypes {
   sut: IdentityCreatedHandler
-  CreateDoctorStub: ICreateDoctor
+  CreateDoctorStub: ICreatePatient
 }
 
 const makeSut = (): SutTypes => {
@@ -35,7 +34,7 @@ const makeSut = (): SutTypes => {
 }
 
 describe('IdentityCreatedHandler', () => {
-  test('Should call ICreateDoctor with correct values', async () => {
+  test('Should call ICreatePatient with correct values', async () => {
     const { sut, CreateDoctorStub } = makeSut()
     const event = mockEvent()
     const spy = jest.spyOn(CreateDoctorStub, 'execute')
@@ -43,14 +42,14 @@ describe('IdentityCreatedHandler', () => {
     expect(spy).toHaveBeenCalledWith(event)
   })
 
-  test('Should throw if ICreateDoctor throws', async () => {
+  test('Should throw if ICreatePatient throws', async () => {
     const { sut, CreateDoctorStub } = makeSut()
     jest.spyOn(CreateDoctorStub, 'execute').mockReturnValueOnce(Promise.reject(new Error()))
     const event = mockEvent()
     await expect(sut.handle(event)).resolves.toBeUndefined()
   })
 
-  test('Should execute successfully when ICreateDoctor completes without error', async () => {
+  test('Should execute successfully when ICreatePatient completes without error', async () => {
     const { sut } = makeSut()
     const event = mockEvent()
     await expect(sut.handle(event)).resolves.not.toThrow()

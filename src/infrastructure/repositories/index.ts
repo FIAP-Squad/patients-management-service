@@ -1,1 +1,1 @@
-export * from './DoctorsRepository'
+export * from './PatientsRepository'
