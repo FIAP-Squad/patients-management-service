@@ -21,6 +21,17 @@ model doctor {
   @@index([email], name: "idx_doctor_email")
 }
 
+model patient {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(50)
+  email     String   @unique @db.VarChar(50)
+  cpf       String   @unique @db.VarChar(11)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([email], name: "idx_patient_email")
+}
+
 model availability {
   id         Int      @id @default(autoincrement())
   status     String   @default("available") @db.VarChar(10)
@@ -36,11 +47,11 @@ model availability {
 }
 
 model timeSlot {
-  id             Int            @id @default(autoincrement())
-  startTime      String
-  endTime        String
-  appointment    appointment[]
-  availability   availability[]
+  id           Int            @id @default(autoincrement())
+  startTime    String
+  endTime      String
+  appointment  appointment[]
+  availability availability[]
 
   @@index([startTime, endTime], name: "idx_timeslot_start_end")
 }
