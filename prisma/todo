@@ -1,0 +1,57 @@
+model Doctor {
+  id             Int           @id @default(autoincrement())
+  name           String
+  email          String        @unique
+  specializations String[]
+  availabilities Availability[]
+  appointments   Appointment[]
+}
+
+model Availability {
+  id        Int        @id @default(autoincrement())
+  doctor    Doctor     @relation(fields: [doctorId], references: [id])
+  doctorId  Int
+  dayOfWeek DayOfWeek  @relation(fields: [dayOfWeekId], references: [id])
+  dayOfWeekId Int
+  slots     Slot[]
+}
+
+model Appointment {
+  id           Int        @id @default(autoincrement())
+  doctor       Doctor     @relation(fields: [doctorId], references: [id])
+  doctorId     Int
+  slot         Slot       @relation(fields: [slotId], references: [id])
+  slotId       Int
+  patientName  String
+  appointmentDate DateTime
+}
+
+model DayOfWeek {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  availabilities Availability[]
+}
+
+model Slot {
+  id           Int        @id @default(autoincrement())
+  status       SlotStatus @default(AVAILABLE) // Novo campo para status do slot
+  startTime    String
+  endTime      String
+  availabilities Availability[]
+  appointments   Appointment[]
+}
+
+enum SlotStatus {
+  AVAILABLE
+  BUSY
+}
+
+enum WeekDays {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
