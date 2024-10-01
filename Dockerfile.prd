@@ -1,5 +1,5 @@
 FROM node:18
-WORKDIR /usr/src/patients-management
+WORKDIR /usr/src/patients-management-service
 COPY package*.json ./
 RUN npm i
 COPY . .
